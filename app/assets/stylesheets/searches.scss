@@ -1,0 +1,29 @@
+// Place all the styles related to the searches controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.fancyOne {
+	padding-top: 10px;
+}
+
+.fancyTwo, .fancyThree, .fancyFour {
+	padding-top: 5px;
+}
+
+.searchInfo {
+	/*right: 600px;*/
+	padding: 20px;
+/*	position: relative;*/
+	text-align: center;
+/*	display: table-row;*/
+	float: left;
+}
+
+.searchResults{
+	list-style-type: none;
+}
+
+.container {
+	display: table;
+	width: 100%;
+}

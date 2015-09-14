@@ -1,0 +1,29 @@
+<div class="col-sm-offset-3">
+	<div class="col-sm-7">
+		<div class="well">
+			<h2 class="text-center">Login to VinoBeats</h2>
+				
+				<%= form_tag login_path do %>
+					
+					<!-- Add email to login -->
+					<div class="form-group">
+						<%= label_tag :email, nil, class:"control-label" %>
+						<%= text_field_tag :email, params[:email], autofocus: true, class:"form-control" %>
+					</div>
+
+					<!-- Add password to login -->
+					<div class="form-group">
+						<%= label_tag :password, nil, class:"control-label" %>
+						<%= password_field_tag :password, params[:password], class:"form-control" %>
+					</div>
+
+					<!-- Submit -->
+					<%= submit_tag "Login", id:"submit-user", class:"btn btn-block btn-primary text-center" %>
+					<% end %>
+
+					<!-- Link to add an account -->
+					<%= link_to "Don't have an account? Sign up!", signup_path %>
+			
+		</div>
+	</div>
+</div>

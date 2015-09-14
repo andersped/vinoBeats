@@ -1,0 +1,48 @@
+<form class="form-horizontal" method="POST" action="/searches">
+    <div class="form-group">
+      <div class="col-sm-5 col-sm-offset-3 col-xs-6 col-xs-offset-1">
+        <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+        <input type="text" class="form-control" id="inputtext" placeholder="varietal" name="varietal[url]">
+        <input type="text" class="form-control" id="input-winery" placeholder="winery" name="winery[url]">
+      </div>
+      <button type="submit" id="search-btn" class="btn btn-default col-sm-1 col-xs-2">Search</button>  
+      
+    </div>
+  </form>
+
+<!-- 	<div class="col-lg-3 col-md-6 text-center"> -->
+		  <% if @htmlResponse  %>
+				<% @htmlResponse["Products"]["List"].each do |name| %>
+			  	<div class="service-box col-lg-3 col-md-6 text-center container-fluid">
+			  	<div>
+			  		<img class="labelImage column" src="<%= name["Labels"][0]["Url"] %>" alt="">
+			  	</div>	
+			  	<p class="text-muted"><%= name["Name"] %></p>
+			  	<p class="text-muted"><b>Vineyard: </b><%= name["Vineyard"]["Name"] %></p>
+			  	<% if name["Appellation"] %>	
+			  		<p class="text-muted"><b>Appellation: </b><%= name["Appellation"]["Name"] %></p>
+			  	<% end %>	
+				  	
+				  	
+				  	<%= form_for([@user, @wine], html:{class:"form-horizontal", role:"form"}) do |f| %>
+				  	<div class="actions col-sm-offset-2">
+				  	  <%= f.hidden_field :name, :value => name["Name"]%>
+				  	  <%= f.hidden_field :winery, :value => name["Vineyard"]["Name"]%>
+				  	  <%= f.hidden_field :varietal, :value => @varietal%>
+				  	  <% if name["Appellation"] %>	
+				  	  	<%= f.hidden_field :appellation, :value => name["Appellation"]["Name"]%>
+				  	  <% end %>	
+				  		<%= f.submit "Drink Wine", class:"btn btn-primary" %>			  		
+				  	</div>
+				  	<% end %>
+				  	<br>
+			  	
+			  	</div>
+
+			  <!-- 	<br> -->
+			  <% end %>
+		  <% end  %>
+<!-- 	</div> -->
+
+		
+  

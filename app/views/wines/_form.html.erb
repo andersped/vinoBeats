@@ -1,0 +1,47 @@
+<%= form_for([@user, @wine], html:{class:"form-horizontal", role:"form"}) do |f| %>
+
+<% render partial: "shared/errors", locals:{instance:@wine} %>
+
+<div class="container">
+	
+	<!-- Name -->
+	<div class="form-group">
+		<%= f.label :name, class:"col-md-2" %>
+		<div class="col-sm-7">
+			<%= f.text_field :name, class:"form-control" %>
+		</div>
+	</div>
+
+	<!-- Varietal -->
+	<div class="form-group">
+		<%= f.label :varietal, class:"col-md-2" %>
+		<div class="col-sm-7">
+			<%= f.text_field :varietal, class:"form-control" %>
+		</div>
+	</div>
+
+	<!-- Vintage -->
+	<div class="form-group">
+		<%= f.label :vintage, class:"col-md-2" %>
+		<div class="col-sm-7">
+			<%= f.text_field :vintage, class:"form-control" %>
+		</div>
+	</div>
+
+	<!-- Winery -->
+	<div class="form-group">
+		<%= f.label :winery, class:"col-md-2" %>
+		<div class="col-sm-7">
+			<%= f.text_field :winery, class:"form-control" %>
+		</div>
+	</div>
+
+	<!-- Submit -->
+	<div class="actions col-sm-offset-2">
+		<%= f.submit class:"btn btn-primary" %>
+		<%= link_to "Cancel", root_path(current_user), class:"btn btn-default" %>
+	</div>
+
+	<% end %>
+
+</div>
