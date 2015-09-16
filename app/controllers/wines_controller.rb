@@ -7,6 +7,10 @@ class WinesController < ApplicationController
 
   def index
     @wines = @user.wines
+    respond_to do |format|
+      format.html
+      format.json { render json: @wines }
+    end
   end
 
   def new
@@ -17,7 +21,7 @@ class WinesController < ApplicationController
   	@wine = @user.wines.create wine_params
 
     if @wine.save
-      redirect_to root_path(current_user), notice: "Added Wine!"
+      redirect_to searches_path
     else
       render :new
     end

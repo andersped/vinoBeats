@@ -53,8 +53,8 @@ class SearchesController < ApplicationController
 			@wine = Wine.find_by_id params[:id]
 		end
 
-		 def wine_params
-  	params.require(:wine).permit(
+		def wine_params
+  		params.require(:wine).permit(
   		:name,
       :varietal,
   		:vintage,
@@ -66,7 +66,7 @@ class SearchesController < ApplicationController
   		:appellation,
   		:label
   		)
-  end
+  	end
 
 
 end

@@ -1,6 +1,7 @@
 require 'open-uri'
 
 class WineFinder
+  
   def initialize(varietal, winery)
   	@varietal = varietal
   	@winery = winery

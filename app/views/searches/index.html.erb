@@ -2,21 +2,24 @@
     <div class="form-group">
       <div class="col-sm-5 col-sm-offset-3 col-xs-6 col-xs-offset-1">
         <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-        <input type="text" class="form-control" id="inputtext" placeholder="varietal" name="varietal[url]">
-        <input type="text" class="form-control" id="input-winery" placeholder="winery" name="winery[url]">
+        <input type="text" class="form-control" id="inputtext" placeholder="Varietal" name="varietal[url]">
+        <input type="text" class="form-control" id="input-winery" placeholder="Winery" name="winery[url]">
       </div>
       <button type="submit" id="search-btn" class="btn btn-default col-sm-1 col-xs-2">Search</button>  
       
     </div>
   </form>
 
+
+
+  </script>
+
 <!-- 	<div class="col-lg-3 col-md-6 text-center"> -->
+		  <div id="wine-search-results">
 		  <% if @htmlResponse  %>
 				<% @htmlResponse["Products"]["List"].each do |name| %>
 			  	<div class="service-box col-lg-3 col-md-6 text-center container-fluid">
-			  	<div>
-			  		<img class="labelImage column" src="<%= name["Labels"][0]["Url"] %>" alt="">
-			  	</div>	
+			  	<img class="labelImage column" src="<%= name["Labels"][0]["Url"] %>" alt="">
 			  	<p class="text-muted"><%= name["Name"] %></p>
 			  	<p class="text-muted"><b>Vineyard: </b><%= name["Vineyard"]["Name"] %></p>
 			  	<% if name["Appellation"] %>	
@@ -27,12 +30,13 @@
 				  	<%= form_for([@user, @wine], html:{class:"form-horizontal", role:"form"}) do |f| %>
 				  	<div class="actions col-sm-offset-2">
 				  	  <%= f.hidden_field :name, :value => name["Name"]%>
+				  	  <%= f.hidden_field :label, :value => name["Labels"][0]["Url"]%>
 				  	  <%= f.hidden_field :winery, :value => name["Vineyard"]["Name"]%>
 				  	  <%= f.hidden_field :varietal, :value => @varietal%>
 				  	  <% if name["Appellation"] %>	
 				  	  	<%= f.hidden_field :appellation, :value => name["Appellation"]["Name"]%>
 				  	  <% end %>	
-				  		<%= f.submit "Drink Wine", class:"btn btn-primary" %>			  		
+				  		<%= f.submit "Drink Wine", :class => "btn btn-primary add-button" %>			  		
 				  	</div>
 				  	<% end %>
 				  	<br>
@@ -42,7 +46,121 @@
 			  <!-- 	<br> -->
 			  <% end %>
 		  <% end  %>
+		  </div>
 <!-- 	</div> -->
+		<br>
+	<div class="col-lg-8 col-lg-offset-2 text-center">
+            <h2 class="section-heading">Your Wines</h2>
+            <hr class="Light">
+        <div class="container text-center" id="userWines">
+            <div class="call-to-action">
+                <!-- <h2>Pair Your Wines!</h2>
+                <a href="#contact" class="btn btn-default btn-xl wow tada page-scroll">Pair Wines!</a> -->
+            </div>
+        </div>
+	</div>
+
+<div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h2 class="section-heading">Choose Your Genre!</h2>
+                    <hr class="primary"> 
+                        <!-- Music Genre Form -->
+                        <form id="musicGenre">
+                            <div>
+                                <select id="pickedGenre">
+                                  <option value="Classical">Classical</option>
+                                  <option value="Jazz">Jazz</option>
+                                  <option value="Electronic">Electronic</option>
+                                  <option value="Country">Country</option>
+                                </select>
+                            </div>  
+                        </form>
+                        <!-- End of Music Genre Form -->
+                        <!-- Play Button -->
+                        <br>
+                        <input type="submit" value="Pair Your Vino with Beats" id="playButton" class="btn btn-primary btn-xl">
+                        <!-- End of Play Button -->
+                        <!-- Launch SoundCloud -->
+                        <div id="musicPlayer"></div>
+                        <!-- End of Music Player -->
+                        <br>
+                        <div id="playlistUL"></div>
+                    <hr class="primary">
+                    <p>Ready to enjoy your next wine? Contact us to get the best tasting and sound experience. We offer food, wine and sound delights!</p>
+                </div>
+	<script type="text/javascript">
+
+	var widget;
+   playlistArray = [];
+   playlistWines = [];
+   playlistIndex = 0
+
+
+		function loadWines(){
+		$.getJSON("<%= user_wines_path(current_user) %>").done(function(data){
+			data.forEach(function(wine){ //wine comes from the app.js routes
+				console.log(wine)
+				var vinoThing = '<div class="col-lg-3 col-md-6 text-center">' +
+                                        '<div class="service-box">' +
+                                            '<img class="labelImage" "column" src='+ wine.label +'>' +
+                                            '<h4>'+ wine.name +'</h4>' + 
+                                            '<p class="text-muted"><b>Winery:</b> '+ wine.winery +'</p>' +
+                                            '<p class="text-muted"><b>Varietal:</b> '+ wine.varietal +'</p>' +
+                                              '<form action="/wines/'+wine._id+'?_method=DELETE" method="POST">' +
+                                                '<input class="text-muted btn btn-default" type="submit" value="Delete" value="DELETE">' +
+                                              '</form><br>' +
+                                            '<a href="#" type="submit" class="btn btn-primary btn-xl page-scroll playlistButton" data-varietal="'+ wine.varietal +'" data-name="'+ wine.name +'">Add to Wine List!</a>'
+                                        '</div>' +
+                                    '</div>';
+
+       $('#userWines').append(vinoThing);
+			});
+			
+		});
+	}
+
+
+		loadWines();
+
+		$('body').on("click", "#playButton", function(e){ 
+          getData();
+        });
+
+		function getData(){
+        var genre = $('#pickedGenre').val();
+      	console.log(genre)
+        var varietal = playlistArray[playlistIndex]
+        //console.log(varietal);
+        //console.log(playlistArray);
+        //console.log(playlistIndex);
+
+        $.ajax({
+          method: "GET",
+          url: "/searchMusic?genre="+genre+"&varietal="+varietal,
+          dataType: 'json',
+          success: function(data){
+            $("#sc-widget").remove()
+            var $iframe = '<iframe class="player" id="sc-widget" src=https://w.soundcloud.com/player/?url=' + data + '&auto_play=true" width="80%" height="175" scrolling="no" frameborder="no"></iframe>'
+            $('#musicPlayer').after($iframe);
+            widget = SC.Widget(document.getElementById('sc-widget'))
+            widget.bind(SC.Widget.Events.FINISH, getData)
+            if (playlistIndex < playlistArray.length -1 ) {
+              playlistIndex += 1
+            } else {
+              playlistIndex = 0
+            }
+              widget.play()
+              widget.setVolume(50);
+          $('.searchInfo').remove();
+          },
+          error: function(err){
+            alert("SOMETHING WENT WRONG!")
+            console.log(err)
+          }
+        });
+        
+      }
+
+  </script>
 
 		
   

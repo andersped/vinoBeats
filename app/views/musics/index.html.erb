@@ -1,0 +1,43 @@
+<h1>Musics#index</h1>
+<p>Find me in app/views/musics/index.html.erb</p>
+
+<!-- <form id="musicGenre">
+  <div>
+	  <select id="pickedGenre">
+		  <option value="Classical">Classical</option>
+		  <option value="Jazz">Jazz</option>
+		  <option value="Electronic">Electronic</option>
+		  <option value="Country">Country</option>
+  	</select>
+	</div>  
+</form> -->
+
+<form class="form-horizontal" method="POST" action="/musics">
+  <div class="form-group">
+	  <select id="pickedGenre" name="genre[url]">
+		  <option value="Classical">Classical</option>
+		  <option value="Jazz">Jazz</option>
+		  <option value="Electronic">Electronic</option>
+		  <option value="Country">Country</option>
+  	</select>
+	</div>        
+
+
+
+
+      <!-- <div class="col-sm-5 col-sm-offset-3 col-xs-6 col-xs-offset-1">
+        <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+        <input type="text" class="form-control" id="inputtext" placeholder="Varietal" name="varietal[url]">
+        <input type="text" class="form-control" id="input-winery" placeholder="Winery" name="winery[url]">
+      </div>
+      <button type="submit" id="search-btn" class="btn btn-default col-sm-1 col-xs-2">Search</button>   -->
+      
+    </div>
+  </form>
+
+
+<%= form_for(@genre, html:{class:"form-horizontal", role:"form"}) do |f| %>
+	<div class="actions col-sm-offset-2">
+		<%= f.select :genre, options_for_select([["Classical"], ["Jazz"], ["Electronic"], ["Country"]]) %>
+	</div>
+<% end %>

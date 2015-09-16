@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   
+  get 'musics/index'
+
   get 'projects/index'
 
   get 'projects/new'
@@ -18,6 +20,7 @@ Rails.application.routes.draw do
   delete '/logout', to: "sessions#logout", as: "logout"
 
   resources :searches
+  resources :musics
   resources :users do
     resources :wines, shallow: true
   end
